@@ -9,6 +9,22 @@ import (
 	"os"
 )
 
+func GetInputFromFile(fileName string) (string, error) {
+	f, err := os.Open(fileName)
+	if err != nil {
+		return "", fmt.Errorf("unable to open file: %v", err)
+	}
+
+	f.Seek(0, 0)
+	scanner := bufio.NewScanner(f)
+	buffer := bytes.Buffer{}
+	for scanner.Scan() {
+		buffer.Write(scanner.Bytes())
+		buffer.Write([]byte("\n"))
+	}
+	return buffer.String(), nil
+}
+
 func GetInput(fileName, year, day, sessionID string) string {
 	url := fmt.Sprintf("https://adventofcode.com/%s/day/%s/input", year, day)
 
